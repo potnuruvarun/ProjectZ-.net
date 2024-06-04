@@ -1,0 +1,57 @@
+[
+  {
+    "employee_id": "E001",
+    "first_name": "John",
+    "last_name": "Doe",
+    "email": "john.doe@example.com",
+    "phone_number": "555-1234",
+    "position": "Software Engineer",
+    "salary": 75000,
+    "department": "IT",
+    "hire_date": "2020-01-15"
+  },
+  {
+    "employee_id": "E002",
+    "first_name": "Jane",
+    "last_name": "Smith",
+    "email": "jane.smith@example.com",
+    "phone_number": "555-5678",
+    "position": "Project Manager",
+    "salary": 85000,
+    "department": "IT",
+    "hire_date": "2019-03-22"
+  },
+  {
+    "employee_id": "E003",
+    "first_name": "Sam",
+    "last_name": "Johnson",
+    "email": "sam.johnson@example.com",
+    "phone_number": "555-8765",
+    "position": "HR Specialist",
+    "salary": 60000,
+    "department": "HR",
+    "hire_date": "2018-07-30"
+  },
+  {
+    "employee_id": "E004",
+    "first_name": "Emily",
+    "last_name": "Davis",
+    "email": "emily.davis@example.com",
+    "phone_number": "555-3456",
+    "position": "Accountant",
+    "salary": 70000,
+    "department": "Finance",
+    "hire_date": "2021-05-10"
+  },
+  {
+    "employee_id": "E005",
+    "first_name": "Michael",
+    "last_name": "Brown",
+    "email": "michael.brown@example.com",
+    "phone_number": "555-7890",
+    "position": "Marketing Manager",
+    "salary": 90000,
+    "department": "Marketing",
+    "hire_date": "2017-11-05"
+  }
+]
