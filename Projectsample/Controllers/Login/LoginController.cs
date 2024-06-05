@@ -1,11 +1,7 @@
-﻿using Microsoft.AspNetCore.Http;
-using Microsoft.AspNetCore.Http.HttpResults;
-using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Mvc;
 using Microsoft.IdentityModel.Tokens;
-using Newtonsoft.Json.Linq;
 using ProjectZ.Common.helpers;
 using ProjectZ.data.DBRepositories.Registration;
-using ProjectZ.data.Settings;
 using ProjectZ.Model.Models.RegistrationModels;
 using ProjectZ.Services.Services.LoginServices;
 using ProjectZ.Services.Services.RegisterServices;
@@ -13,7 +9,7 @@ using System.IdentityModel.Tokens.Jwt;
 using System.Security.Claims;
 using System.Text;
 
-namespace Api.Controllers
+namespace Api.Controllers.Login
 {
     [Route("api/[controller]")]
     [ApiController]
@@ -34,7 +30,7 @@ namespace Api.Controllers
         [Route("Register")]
         public async Task<IActionResult> register(Registrationmodel model)
         {
-            if ((await services.Registration(model)) == 1)
+            if (await services.Registration(model) == 1)
             {
                 return Ok();
             }
@@ -43,19 +39,19 @@ namespace Api.Controllers
 
         [HttpPost]
         [Route("Login")]
-        public async Task<ApiPostResponse<LoginResponseModel>> Login([FromBody]LoginModel model)
+        public async Task<ApiPostResponse<LoginResponseModel>> Login([FromBody] LoginModel model)
         {
             ApiPostResponse<LoginResponseModel> Response = new();
             IActionResult response = Unauthorized();
             AuthenticateUser(model);
             LoginResponseModel result = await logserv.LoginAsync(model);
             Response.Data = result;
-            if(result!=null)
+            if (result != null)
             {
-            var tokenString = GenerateJSONWebToken(model);
-            result.JWTToken = tokenString;
-            Response.Success = true;
-            Response.Message = result.ErrorModel.ErrorMsg ?? string.Empty;
+                var tokenString = GenerateJSONWebToken(model);
+                result.JWTToken = tokenString;
+                Response.Success = true;
+                Response.Message = result.ErrorModel.ErrorMsg ?? string.Empty;
             }
             else
             {

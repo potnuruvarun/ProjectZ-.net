@@ -1,5 +1,8 @@
-﻿using ProjectZ.data;
+﻿using Microsoft.Extensions.Configuration;
+using Microsoft.OpenApi.Models;
+using ProjectZ.data;
 using ProjectZ.Services;
+using static ProjectZ.Model.Models.CommonModels.Common;
 
 namespace Api
 {
@@ -22,5 +25,6 @@ namespace Api
             services.AddMvc();
             services.AddHttpContextAccessor();
         }
+      
     }
 }

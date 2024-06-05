@@ -1,5 +1,6 @@
 ﻿using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
+using Microsoft.AspNetCore.Http.HttpResults;
 using Microsoft.AspNetCore.Mvc;
 using Newtonsoft.Json.Linq;
 using ProjectZ.Common.helpers;
@@ -43,6 +44,8 @@ namespace Api.Controllers.Employee
                 Employee data = item.ToObject<Employee>();
                 employeelist.Add(data);
                 Response.Data = employeelist;
+                Response.Success = true;
+                //Response.Message = "Error";
             }
             return Response;
         }
