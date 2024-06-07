@@ -1,6 +1,7 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using Microsoft.IdentityModel.Tokens;
 using ProjectZ.Common.helpers;
+using ProjectZ.Common.Services;
 using ProjectZ.data.DBRepositories.Registration;
 using ProjectZ.Model.Models.RegistrationModels;
 using ProjectZ.Services.Services.LoginServices;
@@ -8,6 +9,7 @@ using ProjectZ.Services.Services.RegisterServices;
 using System.IdentityModel.Tokens.Jwt;
 using System.Security.Claims;
 using System.Text;
+using static ProjectZ.Model.Models.CommonModels.Common;
 
 namespace Api.Controllers.Login
 {
@@ -18,12 +20,14 @@ namespace Api.Controllers.Login
         IRegisterServ services;
         ILoginServ logserv;
         IConfiguration configuration;
+        IEmailServices mailsev;
         //AppSettings _appSetting;
-        public LoginController(IRegistrationRepo repo, IRegisterServ _services, ILoginServ _logiserv, IConfiguration _config)
+        public LoginController(IRegistrationRepo repo, IRegisterServ _services, ILoginServ _logiserv, IConfiguration _config, IEmailServices _mailserv)
         {
             services = _services;
             logserv = _logiserv;
             configuration = _config;
+            mailsev = _mailserv;
         }
 
         [HttpPost]
@@ -61,6 +65,62 @@ namespace Api.Controllers.Login
             return Response;
         }
 
+        private int GenerateRandomOtp()
+        {
+            Random rand = new Random();
+            return rand.Next(100000, 999999); // Generates a random 6-digit OTP
+        }
+
+        [HttpPost]
+        [Route("{email}")]
+        public async Task<ApiPostResponse<otpmodel>> SendOtp(string email)
+        {
+            ApiPostResponse<otpmodel> Response = new();
+            var otp = GenerateRandomOtp();
+            var model = new otpmodel
+            {
+                email = email,
+                otp = otp
+            };
+
+            // Send the OTP via email
+            var subject = "Your One-Time Password (OTP)";
+            var body = $"Your OTP is: {otp}";
+            otpmodel result = await logserv.otp(model);
+
+            Response.Data = result;
+            if (result != null)
+            {
+                await mailsev.SendEmail(email, subject, body);
+                Response.Success = true;
+                Response.Message = "OTP success";
+            }
+            else
+            {
+                Response.Success = false;
+            }
+            return Response;
+        }
+
+        [HttpPost]
+        [Route("reset")]
+        public async Task<ApiPostResponse<otpmodel>> reset(otpmodel models)
+        {
+            ApiPostResponse<otpmodel> Response = new();
+            otpmodel result=await logserv.Resetpassword(models);
+            Response.Data = result;
+            if (result != null)
+            {
+                Response.Success = true;
+
+            }
+
+            else
+            {
+                Response.Success = false;
+            }
+            return Response;
+        }
         private string GenerateJSONWebToken(LoginModel logindata)
         {
             var securityKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(configuration["Jwt:Key"]));

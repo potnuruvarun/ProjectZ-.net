@@ -13,6 +13,8 @@ namespace ProjectZ.Common.helpers
         public const string registration = "sp_registration";
         public const string Register = "sp_register";
         public const string Login = "sp_login";
+        public const string resetpassword = "sp_resetpassword";
+        public const string otpmodel = "spotp";
         #endregion
 
     }

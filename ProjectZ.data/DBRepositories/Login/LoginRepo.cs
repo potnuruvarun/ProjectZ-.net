@@ -10,6 +10,7 @@ using System.Data;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using static ProjectZ.Model.Models.CommonModels.Common;
 
 namespace ProjectZ.data.DBRepositories.Login
 {
@@ -43,11 +44,40 @@ namespace ProjectZ.data.DBRepositories.Login
             para.Add("@Email", model.Email);
             para.Add("@Password", model.Password);
             var data = await QueryFirstOrDefaultAsync<LoginResponseModel>(StorageProcedure.Login, para, commandType: CommandType.StoredProcedure);
-            if(data!=null)
+            if (data != null)
             {
-            return data;
+                return data;
             }
             return null;
+        }
+
+        public async Task<otpmodel> resetpassword(otpmodel model)
+        {
+            var para = new DynamicParameters();
+            para.Add("@email", model.email);
+            para.Add("@otp", model.otp);
+            para.Add("@password", model.password);
+            var data = await QueryFirstOrDefaultAsync<otpmodel>(StorageProcedure.resetpassword, para, commandType: CommandType.StoredProcedure);
+            if (data != null)
+            {
+                return data;
+            }
+            else
+                return null;
+        }
+
+        public async Task<otpmodel> otpverification(otpmodel model)
+        {
+            var para = new DynamicParameters();
+            para.Add("@email", model.email);
+            para.Add("@otp", model.otp);
+            var data = await QueryFirstOrDefaultAsync<otpmodel>(StorageProcedure.otpmodel, para, commandType: CommandType.StoredProcedure);
+            if (data != null)
+            {
+                return data;
+            }
+            else
+                return null;
         }
     }
 }

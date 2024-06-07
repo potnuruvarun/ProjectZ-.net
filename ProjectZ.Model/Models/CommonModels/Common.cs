@@ -1,4 +1,5 @@
 ﻿using Microsoft.AspNetCore.Http;
+using ProjectZ.Model.Models.RegistrationModels;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -33,9 +34,20 @@ namespace ProjectZ.Model.Models.CommonModels
         public class mailresponse
         {
             public string? message { get; set; }
-            public string ?status { get; set; }
+            public string? status { get; set; }
             public MailRequest mail { get; set; }
         }
+
+
+        public class otpmodel
+        {
+            public string? email { get; set; }
+            public int otp { get; set; }
+            public string? password { get; set; }
+        }
     }
+
+
+
 
 }
