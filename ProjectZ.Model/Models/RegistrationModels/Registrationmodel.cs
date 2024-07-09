@@ -33,13 +33,14 @@ namespace ProjectZ.Model.Models.RegistrationModels
         public EmployeeModel Employee { get; set; } = new();
         public string? JWTToken { get; set; }
         public int UserId { get; set; }
+        public int Active { get; set; }
     }
     public class ErrorModel
     {
         public int ErrorCode { get; set; }
         public string ErrorMsg { get; set; } = string.Empty;
     }
-    public class EmployeeModel  
+    public class EmployeeModel
     {
         public long UserId { get; set; }
         public string? Designation { get; set; }
@@ -60,5 +61,8 @@ namespace ProjectZ.Model.Models.RegistrationModels
         public string? AgencySubscriptionModules { get; set; }
         public bool? IsFirstTimeLogin { get; set; }
     }
+
+    
+
 
 }

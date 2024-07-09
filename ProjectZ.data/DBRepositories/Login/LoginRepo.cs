@@ -44,11 +44,12 @@ namespace ProjectZ.data.DBRepositories.Login
             para.Add("@Email", model.Email);
             para.Add("@Password", model.Password);
             var data = await QueryFirstOrDefaultAsync<LoginResponseModel>(StorageProcedure.Login, para, commandType: CommandType.StoredProcedure);
-            if (data != null)
+            if (data != null )
             {
                 return data;
             }
-            return null;
+           
+            return data;
         }
 
         public async Task<otpmodel> resetpassword(otpmodel model)
@@ -78,6 +79,19 @@ namespace ProjectZ.data.DBRepositories.Login
             }
             else
                 return null;
+        }
+
+        public async Task<int> verify(string email)
+        {
+            var para = new DynamicParameters();
+            para.Add("@email", email);
+            var data = await ExecuteAsync<int>(StorageProcedure.verify, para, commandType: CommandType.StoredProcedure);
+            if (data != null)
+            {
+                return 1;
+            }
+            else
+                return 0;
         }
     }
 }

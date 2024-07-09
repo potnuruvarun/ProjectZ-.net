@@ -17,5 +17,6 @@ namespace ProjectZ.data.DBRepositories.Login
         Task<otpmodel> resetpassword(otpmodel model);
 
         Task<otpmodel> otpverification(otpmodel model);
+        Task<int> verify(string email);
     }
 }

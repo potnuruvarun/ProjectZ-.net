@@ -13,7 +13,7 @@ namespace ProjectZ.Common.helpers
         public string Message { get; set; }
     }
     public class ApiResponse<T> : ApiResponse
-    {
+    {   
         public virtual IList<T> Data { get; set; }
     }
     public class ApiPostResponse<T> : ApiResponse

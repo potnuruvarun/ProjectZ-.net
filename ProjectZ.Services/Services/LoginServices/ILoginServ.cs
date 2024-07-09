@@ -17,5 +17,7 @@ namespace ProjectZ.Services.Services.LoginServices
         Task<otpmodel> Resetpassword(otpmodel model);
         Task<otpmodel> otp(otpmodel model);
 
+        Task<int> verify(string email);
+
     }
 }

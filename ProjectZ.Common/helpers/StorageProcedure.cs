@@ -15,6 +15,7 @@ namespace ProjectZ.Common.helpers
         public const string Login = "sp_login";
         public const string resetpassword = "sp_resetpassword";
         public const string otpmodel = "spotp";
+        public const string verify = "sp_verify";
         #endregion
 
     }

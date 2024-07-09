@@ -36,5 +36,10 @@ namespace ProjectZ.Services.Services.LoginServices
         {
             return await repo.resetpassword(model);
         }
+
+        public async Task<int> verify(string email)
+        {
+            return await repo.verify(email);
+        }
     }
 }

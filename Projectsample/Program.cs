@@ -1,18 +1,34 @@
 using Api;
+using Api.JwtFeatures;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
+using Microsoft.AspNetCore.Identity;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.IdentityModel.Tokens;
 using Microsoft.OpenApi.Models;
 using ProjectZ.Common.Services;
+using ProjectZ.data;
 using ProjectZ.data.config;
 using System.Text;
 using static ProjectZ.Model.Models.CommonModels.Common;
 
+
+
 var builder = WebApplication.CreateBuilder(args);
+
+var allowSpecificOrigins = "two_factor_auth_cors";
 
 // Add services to the container.
 
 builder.Services.AddControllers();
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
+
+builder.Services.AddDbContext<RepositoryContext>(opts =>
+    opts.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection")));
+
+builder.Services.AddIdentity<User, IdentityRole>()
+    .AddEntityFrameworkStores<RepositoryContext>()
+    .AddDefaultTokenProviders();
+
 builder.Services.Configure<DataConfig>(builder.Configuration.GetSection("ConnectionStrings"));
 builder.Services.Configure<MailSettings>(builder.Configuration.GetSection("MailSettings"));
 builder.Services.AddEndpointsApiExplorer();
@@ -49,13 +65,15 @@ builder.Services.AddSwaggerGen(c =>
                 });
 });
 
-builder.Services.AddAuthentication(options => {
+builder.Services.AddAuthentication(options =>
+{
     options.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;
     options.DefaultChallengeScheme = JwtBearerDefaults.AuthenticationScheme;
     options.DefaultScheme = JwtBearerDefaults.AuthenticationScheme;
 })
     // Adding Jwt Bearer
-    .AddJwtBearer(options => {
+    .AddJwtBearer(options =>
+    {
         options.SaveToken = true;
         options.RequireHttpsMetadata = false;
         options.TokenValidationParameters = new TokenValidationParameters()
@@ -68,18 +86,24 @@ builder.Services.AddAuthentication(options => {
             ClockSkew = TimeSpan.Zero
         };
     });
+
 RegistartionServices.RegisterService(builder.Services);
-builder.Services.AddCors(c =>
+
+builder.Services.AddCors(options =>
 {
-    c.AddPolicy("AllowOrigin", options => options.AllowAnyOrigin().AllowAnyMethod().
-     AllowAnyHeader());
+    options.AddPolicy("allowAllOriginsWithoutCredentials",
+        policyBuilder =>
+        {
+            policyBuilder.WithOrigins("http://localhost:4200", "https://localhost:4200")
+                         .AllowAnyMethod()
+                         .AllowAnyHeader()
+                         .AllowCredentials();
+        });
 });
 
-
 var app = builder.Build();
-app.UseCors("AllowOrigin");
+app.UseCors("allowAllOriginsWithoutCredentials");
 
-// Configure the HTTP request pipeline.
 if (app.Environment.IsDevelopment())
 {
     app.UseSwagger();
