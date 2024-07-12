@@ -1,4 +1,5 @@
-﻿using ProjectZ.data.DBRepositories.Login;
+﻿using ProjectZ.data.DBRepositories.Dmeo;
+using ProjectZ.data.DBRepositories.Login;
 using ProjectZ.data.DBRepositories.Registration;
 using System;
 using System.Collections.Generic;
@@ -16,6 +17,8 @@ namespace ProjectZ.data
             {
                 { typeof(IRegistrationRepo),typeof(RegistrationRepo)},
                 {typeof(ILoginRepo),typeof(LoginRepo)},
+                {typeof(ICategory),typeof(Category)},
+
             };
             return dictionary;
         }

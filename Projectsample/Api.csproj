@@ -8,6 +8,7 @@
 
   <ItemGroup>
     <PackageReference Include="AutoMapper" Version="13.0.1" />
+    <PackageReference Include="EPPlus" Version="7.2.1" />
     <PackageReference Include="GoogleAuthenticator" Version="3.2.0" />
     <PackageReference Include="Microsoft.AspNetCore.Authentication.JwtBearer" Version="8.0.6" />
     <PackageReference Include="Microsoft.AspNetCore.Mvc.Core" Version="2.2.5" />
@@ -28,6 +29,21 @@
   </ItemGroup>
 
   <ItemGroup>
+    <Folder Include="Resources\SubCategory\FashionWear\Girls\" />
+    <Folder Include="Resources\SubCategory\FashionWear\Men\" />
+    <Folder Include="Resources\SubCategory\FashionWear\FashionWearPosters\" />
+    <Folder Include="Resources\SubCategory\FashionWear\Women\" />
+    <Folder Include="Resources\SubCategory\FootWear\Girls\" />
+    <Folder Include="Resources\SubCategory\FootWear\Men\" />
+    <Folder Include="Resources\SubCategory\FootWear\FootWearPosters\" />
+    <Folder Include="Resources\SubCategory\FootWear\Women\" />
+    <Folder Include="Resources\Posters\FootwearPosters\" />
+    <Folder Include="Resources\Posters\DashBoardPosters\" />
+    <Folder Include="Resources\Posters\FashionPosters\" />
+    <Folder Include="Resources\Posters\ElecrtonicsPosters\" />
+    <Folder Include="Resources\Posters\HouseFurnishingPosters\" />
+    <Folder Include="Resources\Posters\FMCGPosters\" />
+    <Folder Include="Resources\Posters\ToysAndSportsPosters\" />
     <Folder Include="Uploads\" />
   </ItemGroup>
 

@@ -3,6 +3,7 @@ using Api.JwtFeatures;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.FileProviders;
 using Microsoft.IdentityModel.Tokens;
 using Microsoft.OpenApi.Models;
 using ProjectZ.Common.Services;
@@ -89,20 +90,18 @@ builder.Services.AddAuthentication(options =>
 
 RegistartionServices.RegisterService(builder.Services);
 
-builder.Services.AddCors(options =>
-{
-    options.AddPolicy("allowAllOriginsWithoutCredentials",
-        policyBuilder =>
-        {
-            policyBuilder.WithOrigins("http://localhost:4200", "https://localhost:4200")
-                         .AllowAnyMethod()
-                         .AllowAnyHeader()
-                         .AllowCredentials();
-        });
-});
+//builder.Services.AddCors(options =>
+//{
+//    options.AddPolicy("allowAllOriginsWithoutCredentials",
+//        policyBuilder =>
+//        {
+//            policyBuilder.AllowAnyMethod().AllowAnyHeader().AllowCredentials();
+//        });
+//});
 
 var app = builder.Build();
-app.UseCors("allowAllOriginsWithoutCredentials");
+//app.UseCors("allowAllOriginsWithoutCredentials");
+app.UseCors(options => options.AllowAnyHeader().AllowAnyMethod().AllowAnyOrigin());
 
 if (app.Environment.IsDevelopment())
 {
@@ -113,6 +112,15 @@ if (app.Environment.IsDevelopment())
 app.UseAuthentication();
 
 app.UseHttpsRedirection();
+
+app.UseStaticFiles();
+
+
+app.UseStaticFiles(new StaticFileOptions
+{
+    FileProvider = new PhysicalFileProvider(Path.Combine(Directory.GetCurrentDirectory(), "Resources")),
+    RequestPath = "/Resources" ,
+});
 
 app.UseAuthorization();
 

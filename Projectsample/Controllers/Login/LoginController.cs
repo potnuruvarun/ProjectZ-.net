@@ -1,6 +1,4 @@
-﻿using Api.JwtFeatures;
-using AutoMapper;
-using Microsoft.AspNetCore.Cors;
+﻿using AutoMapper;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.IdentityModel.Tokens;
@@ -17,7 +15,7 @@ using System.Security.Claims;
 using System.Text;
 using System.Text.Encodings.Web;
 using static ProjectZ.Model.Models.CommonModels.Common;
-using static System.Runtime.InteropServices.JavaScript.JSType;
+using Microsoft.AspNetCore.Cors;
 
 
 namespace Api.Controllers.Login

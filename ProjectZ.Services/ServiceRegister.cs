@@ -1,4 +1,5 @@
-﻿using ProjectZ.Services.Services.LoginServices;
+﻿using ProjectZ.Services.Services.CategoryServices;
+using ProjectZ.Services.Services.LoginServices;
 using ProjectZ.Services.Services.RegisterServices;
 using System;
 using System.Collections.Generic;
@@ -16,6 +17,7 @@ namespace ProjectZ.Services
             {
                 { typeof(IRegisterServ),typeof(RegisterServ)},
                 { typeof(ILoginServ),typeof(LoginServ)},
+                { typeof(ICategoryServ),typeof(CategoryServ)}
             };
             return dictionary;
         }

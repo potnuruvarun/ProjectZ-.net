@@ -32,7 +32,7 @@ namespace Api.Controllers.Employee
         [HttpGet]
         public ApiPostResponse<List<Employee>> Get()
         {
-            ApiPostResponse<List<Employee>> Response = new ApiPostResponse<List<Employee>>();
+            ApiPostResponse<List<Employee>> Response = new();
             string jsonFile = @"C:\Users\sit363.SIT\source\repos\Projectsample\Projectsample\Employee.json";
             //string json = File.ReadAllText(jsonFile);
             using StreamReader reader = new(jsonFile);

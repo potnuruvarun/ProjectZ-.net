@@ -45,9 +45,8 @@ namespace ProjectZ.Model.Models.CommonModels
             public int otp { get; set; }
             public string? password { get; set; }
         }
+
+
+       
     }
-
-
-
-
 }
