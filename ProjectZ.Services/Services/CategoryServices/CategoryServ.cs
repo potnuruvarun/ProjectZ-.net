@@ -15,6 +15,12 @@ namespace ProjectZ.Services.Services.CategoryServices
         {
             repo = _repo;
         }
+
+        public async Task<List<Product>> AddProduct(List<Product> model)
+        {
+            return await repo.AddProduct(model);
+        }
+
         public async Task<List<SubCategory>> AddSubcategory(List<SubCategory> model)
         {
             return await repo.AddSubcategory(model);

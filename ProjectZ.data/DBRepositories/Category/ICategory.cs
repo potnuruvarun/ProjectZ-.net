@@ -15,5 +15,7 @@ namespace ProjectZ.data.DBRepositories.Dmeo
         Task<List<SubCategory>>AddSubcategory(List<SubCategory> model);
 
         Task<List<SubCategory>> GetSubPosters(string Category);
+
+        Task<List<Product>> AddProduct(List<Product> model);
     }
 }

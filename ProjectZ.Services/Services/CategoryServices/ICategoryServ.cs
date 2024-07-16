@@ -10,5 +10,7 @@ namespace ProjectZ.Services.Services.CategoryServices
     public interface ICategoryServ
     {
         Task<List<SubCategory>> AddSubcategory(List<SubCategory> model);
+
+        Task<List<Product>> AddProduct(List<Product> model);
     }
 }

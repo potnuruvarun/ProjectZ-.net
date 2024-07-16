@@ -1,28 +1,22 @@
-﻿using AutoMapper;
-using Dapper;
-using Microsoft.EntityFrameworkCore.Metadata.Internal;
+﻿using Dapper;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.Options;
 using ProjectZ.Common.helpers;
 using ProjectZ.data.config;
+using ProjectZ.data.DBRepositories.GetInfo;
 using ProjectZ.Model.Models.CategoryModels.Category;
 using ProjectZ.Model.Models.RegistrationModels;
-using System;
-using System.Collections.Generic;
 using System.Data;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace ProjectZ.data.DBRepositories.Dmeo
 {
     
     public class Category : BaseRepository, ICategory
     {
-        IMapper _mapper;
-        public Category(IOptions<DataConfig> connectionString, IConfiguration config = null, IMapper mapper = null) : base(connectionString, config)
+        IGetInfoRepo _inforepo;
+        public Category(IOptions<DataConfig> connectionString, IConfiguration config = null,IGetInfoRepo repo=null) : base(connectionString, config)
         {
-            _mapper = mapper;
+            _inforepo = repo;
         }
         public async Task<List<SubCategory>> GetSubPosters(string Category)
         {
@@ -75,7 +69,7 @@ namespace ProjectZ.data.DBRepositories.Dmeo
             {
                 var category = item.Category;
                 var subcategory = item.SubCategoryName;
-                var serverpath = item.ServerPath;
+                var serverpath = item.ImagePath;
                 var para = new DynamicParameters();
                 para.Add("@Categoryname", category);
                 para.Add("@Subcategoryname", subcategory);
@@ -96,8 +90,6 @@ namespace ProjectZ.data.DBRepositories.Dmeo
         {
             var para = new DynamicParameters();
             para.Add("@Category", Category);
-           
-            
             var data = await QueryAsync<Posters>(StorageProcedure.viewposters, para, commandType: CommandType.StoredProcedure);
             if (data.Count() >= 1)
             {
@@ -106,8 +98,42 @@ namespace ProjectZ.data.DBRepositories.Dmeo
             return null;
         }
 
-      
+        public async Task<List<Product>> AddProduct(List<Product> model)
+        {
 
+            var insertedSubCategories = new List<Product>();
+
+            foreach (var item in model)
+            {
+                var category = item.Category;
+                var subcategory = item.SubCategoryName;
+                var brandname = item.BrandName;
+                var Description = item.Description;
+                var Amount = item.Amount;
+                var Imagepath = item.ImagePath;
+                var para = new DynamicParameters();
+                para.Add("@Category", category);
+                para.Add("@SubCategory", subcategory);
+                para.Add("@BrandName", brandname);
+                para.Add("@Description", Description);
+                para.Add("@Amount", Amount);
+                para.Add("@ImagePath", Imagepath);
+
+                var data = await QueryFirstOrDefaultAsync<Product>(StorageProcedure.Addproducts, para, commandType: CommandType.StoredProcedure);
+
+                if (data != null)
+                {
+                    insertedSubCategories.Add(data);
+                }
+            }
+
+            return insertedSubCategories;
+        }
+
+        public class UserInfo()
+        {
+            public int roleid { get; set; }
+        }
 
     }
 

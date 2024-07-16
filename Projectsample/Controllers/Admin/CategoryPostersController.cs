@@ -5,6 +5,7 @@ using OfficeOpenXml;
 using ProjectZ.Common.helpers;
 using ProjectZ.data;
 using ProjectZ.data.DBRepositories.Dmeo;
+using ProjectZ.data.DBRepositories.GetInfo;
 using ProjectZ.Model.Models.CategoryModels.Category;
 using System.Data.SqlClient;
 using System.Net.Http.Headers;
@@ -19,10 +20,12 @@ namespace Api.Controllers.Collection
     {
         private string _imageFolderPath = Path.Combine(Directory.GetCurrentDirectory(), "Resources", "Posters");
         ICategory _repo;
+        IGetInfoRepo _infoRepo;
 
-        public CategoryPostersController(ICategory demo)
+        public CategoryPostersController(ICategory demo, IGetInfoRepo inforepo)
         {
             _repo = demo;
+            _infoRepo= inforepo;
         }
 
         [HttpPost, DisableRequestSizeLimit]
@@ -114,43 +117,7 @@ namespace Api.Controllers.Collection
             return Response;
         }
 
-        [HttpGet("GetPosters")]
-        public async Task<ApiPostResponse<List<Posters>>> Getdaata(string Category)
-        {
-            ApiPostResponse<List<Posters>> Response = new();
-            var result = await _repo.GetPosters(Category);
-            Response.Data = result;
-            if (result != null)
-            {
-                Response.Success = true;
-                Response.Message = "Success";
-            }
-            else
-            {
-                Response.Success = false;
-                Response.Message = string.Empty;
-            }
-            return Response;
-        }
-
-        [HttpGet("GetSubCAtegoryPosters")]
-        public async Task<ApiPostResponse<List<SubCategory>>> GetSubcategoryposters(string Category)
-        {
-            ApiPostResponse<List<SubCategory>> Response = new();
-            var result = await _repo.GetSubPosters(Category);
-            Response.Data = result;
-            if (result != null)
-            {
-                Response.Success = true;
-                Response.Message = "Success";
-            }
-            else
-            {
-                Response.Success = false;
-                Response.Message = string.Empty;
-            }
-            return Response;
-        }
+        
 
     }
 }

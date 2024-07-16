@@ -11,4 +11,8 @@
     <ProjectReference Include="..\ProjectZ.Model\ProjectZ.Model.csproj" />
   </ItemGroup>
 
+  <ItemGroup>
+    <Folder Include="Services\UserServices\" />
+  </ItemGroup>
+
 </Project>

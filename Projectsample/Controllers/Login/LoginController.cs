@@ -16,6 +16,7 @@ using System.Text;
 using System.Text.Encodings.Web;
 using static ProjectZ.Model.Models.CommonModels.Common;
 using Microsoft.AspNetCore.Cors;
+using Api.JwtFeatures;
 
 
 namespace Api.Controllers.Login
@@ -33,9 +34,9 @@ namespace Api.Controllers.Login
         private  UserManager<User> _userManager;
         private const string AuthenticatorUriFormat = "otpauth://totp/{0}:{1}?secret={2}&issuer={0}&digits=6";
         private IMapper _mapper;
-        //private  JwtHandler _jwtHandler;
+        private JwtHandler _jwtHandler;
         //AppSettings _appSetting;
-        public LoginController(IRegistrationRepo repo, IRegisterServ _services, ILoginServ _logiserv, IConfiguration _config, IEmailServices _mailserv,UserManager<User> manager,UrlEncoder _url/*,JwtHandler _jwt*/)
+        public LoginController(IRegistrationRepo repo, IRegisterServ _services, ILoginServ _logiserv, IConfiguration _config, IEmailServices _mailserv,UserManager<User> manager,UrlEncoder _url, JwtHandler _jwt)
         {
             services = _services;
             logserv = _logiserv;
@@ -43,7 +44,7 @@ namespace Api.Controllers.Login
             mailsev = _mailserv;
             _userManager = manager;
             _urlEncoder = _url;
-            //_jwtHandler=_jwt;
+            _jwtHandler=_jwt;
         }
 
         [HttpPost]
@@ -70,6 +71,8 @@ namespace Api.Controllers.Login
                 FirstName = userForRegistration.FirstName,
                 LastName = userForRegistration.LastName,
                 Email=userForRegistration.Email,
+                PasswordHash=userForRegistration.Password,
+                PhoneNumber=userForRegistration.Phonenumber
             };
 
             var result = await _userManager.CreateAsync(user, userForRegistration.Password);
@@ -248,48 +251,49 @@ namespace Api.Controllers.Login
             return Response;
 
         }
-        //[HttpPost("loginauth")]
-        //public async Task<IActionResult> Login([FromBody] UserForAuthenticationDto userForAuthentication)
-        //{
-        //    var user = await _userManager.FindByNameAsync(userForAuthentication.Email);
+        [HttpPost("loginauth")]
+        public async Task<IActionResult> Login([FromBody] UserForAuthenticationDto userForAuthentication)
+        {
+            var user = await _userManager.FindByEmailAsync(userForAuthentication.Email);
 
-        //    if (user == null || !await _userManager.CheckPasswordAsync(user, userForAuthentication.Password))
-        //        return Unauthorized(new AuthResponseDto { ErrorMessage = "Invalid Authentication" });
+            if (user == null || !await _userManager.CheckPasswordAsync(user, userForAuthentication.Password))
+                return Unauthorized(new AuthResponseDto { ErrorMessage = "Invalid Authentication" });
 
-        //    var isTfaEnabled = await _userManager.GetTwoFactorEnabledAsync(user);
+            var isTfaEnabled = await _userManager.GetTwoFactorEnabledAsync(user);
 
-        //    if (!isTfaEnabled)
-        //    {
-        //        var signingCredentials = _jwtHandler.GetSigningCredentials();
-        //        var claims = _jwtHandler.GetClaims(user);
-        //        var tokenOptions = _jwtHandler.GenerateTokenOptions(signingCredentials, claims);
-        //        var token = new JwtSecurityTokenHandler().WriteToken(tokenOptions);
+            if (!isTfaEnabled)
+            {
+                var signingCredentials = _jwtHandler.GetSigningCredentials();
+                var claims = _jwtHandler.GetClaims(user);
+                var tokenOptions = _jwtHandler.GenerateTokenOptions(signingCredentials, claims);
+                var token = new JwtSecurityTokenHandler().WriteToken(tokenOptions);
 
-        //        return Ok(new AuthResponseDto { IsAuthSuccessful = true, IsTfaEnabled = false, Token = token });
-        //    }
+                return Ok(new AuthResponseDto { IsAuthSuccessful = true, IsTfaEnabled = false, Token = token });
+            }
 
-        //    return Ok(new AuthResponseDto { IsAuthSuccessful = true, IsTfaEnabled = true });
-        //}
+            return Ok(new AuthResponseDto { IsAuthSuccessful = true, IsTfaEnabled = true });
+        }
 
-        //[HttpPost("login-tfa")]
-        //public async Task<IActionResult> LoginTfa([FromBody] TfaDto tfaDto)
-        //{
-        //    var user = await _userManager.FindByNameAsync(tfaDto.Email);
+        [HttpPost("login-tfa")]
+        public async Task<IActionResult> LoginTfa([FromBody] TfaDto tfaDto)
+        {
+            var user = await _userManager.FindByNameAsync(tfaDto.Email);
 
-        //    if (user == null)
-        //        return Unauthorized(new AuthResponseDto { ErrorMessage = "Invalid Authentication" });
+            if (user == null)
+                return Unauthorized(new AuthResponseDto { ErrorMessage = "Invalid Authentication" });
 
-        //    var validVerification = await _userManager.VerifyTwoFactorTokenAsync(user, _userManager.Options.Tokens.AuthenticatorTokenProvider, tfaDto.Code);
-        //    if (!validVerification)
-        //        return BadRequest("Invalid Token Verification");
+            var validVerification = await _userManager.VerifyTwoFactorTokenAsync(user, _userManager.Options.Tokens.AuthenticatorTokenProvider, tfaDto.Code);
+            if (!validVerification)
+                return BadRequest("Invalid Token Verification");
 
-        //    var signingCredentials = _jwtHandler.GetSigningCredentials();
-        //    var claims = _jwtHandler.GetClaims(user);
-        //    var tokenOptions = _jwtHandler.GenerateTokenOptions(signingCredentials, claims);
-        //    var token = new JwtSecurityTokenHandler().WriteToken(tokenOptions);
+            var signingCredentials = _jwtHandler.GetSigningCredentials();
+            var claims = _jwtHandler.GetClaims(user);
+            var tokenOptions = _jwtHandler.GenerateTokenOptions(signingCredentials, claims);
+            var token = new JwtSecurityTokenHandler().WriteToken(tokenOptions);
 
-        //    return Ok(new AuthResponseDto { IsAuthSuccessful = true, IsTfaEnabled = true, Token = token });
-        //}
+            return Ok(new AuthResponseDto { IsAuthSuccessful = true, IsTfaEnabled = true, Token = token });
+        }
+
         private string GenerateJSONWebToken(LoginModel logindata)
         {
             var securityKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(configuration["Jwt:Key"]));
@@ -404,6 +408,7 @@ namespace Api.Controllers.Login
 
         [Compare("Password", ErrorMessage = "The password and confirmation password do not match.")]
         public string ConfirmPassword { get; set; }
+        public string Phonenumber { get; set; }
     }
     public class RegistrationResponseDto
     {

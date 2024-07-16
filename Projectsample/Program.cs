@@ -20,6 +20,7 @@ var allowSpecificOrigins = "two_factor_auth_cors";
 
 // Add services to the container.
 
+builder.Services.AddScoped<JwtHandler>();
 builder.Services.AddControllers();
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
 

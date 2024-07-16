@@ -18,5 +18,7 @@ namespace ProjectZ.data.DBRepositories.Login
 
         Task<otpmodel> otpverification(otpmodel model);
         Task<int> verify(string email);
+
+        //Task<int> Getinformation(int roleid);
     }
 }

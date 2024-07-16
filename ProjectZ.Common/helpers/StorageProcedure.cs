@@ -28,8 +28,17 @@ namespace ProjectZ.Common.helpers
         #region
         public const string AddingSubCategories = "sp_Subcategory";
         public const string viewsubcategoryposters = "sp_viewsubcategoryposters";
-
         #endregion
+
+        #region
+        public const string Addproducts = "_spinsertproduct";
+        public const string GetProducts = "sp_products";
+        #endregion
+
+        #region
+        public const string GetRoled = "sp_role";
+        #endregion
+
 
     }
 }

@@ -60,7 +60,7 @@ namespace Api.Controllers.Admin
                             {
                                 SubCategoryName = subcategory,
                                 Category = category,
-                                ServerPath = $"{baseUrl}/resources/SubCategory/{category}/{subcategory}/{fileName}"
+                                ImagePath = $"{baseUrl}/resources/SubCategory/{category}/{subcategory}/{fileName}"
                             };
                             dataModels.Add(model);
                         }
@@ -68,6 +68,71 @@ namespace Api.Controllers.Admin
                 }
             }
             var result = await services.AddSubcategory(dataModels);
+            if (result != null)
+            {
+                Response.Success = true;
+            }
+            else
+            {
+                Response.Success = false;
+                Response.Message = string.Empty;
+            }
+            return Response;
+        }
+
+        [HttpPost("Productupload")]
+        public async Task<ApiPostResponse<SubCategory>> productupload(IFormFile file)
+        {
+            ApiPostResponse<SubCategory> Response = new();
+
+            if (file == null || file.Length == 0)
+            {
+                return Response;
+            }
+
+            var dataModels = new List<Product>();
+            using (var stream = new MemoryStream())
+            {
+                await file.CopyToAsync(stream);
+                using (var package = new ExcelPackage(stream))
+                {
+                    var worksheet = package.Workbook.Worksheets[0];
+                    var rowCount = worksheet.Dimension.Rows;
+
+                    for (int row = 2; row <= rowCount; row++)
+                    {
+                        var category = worksheet.Cells[row, 2].Text;
+                        var subcategory = worksheet.Cells[row, 3].Text;
+                        var BrandName = worksheet.Cells[row, 4].Text;
+                        var Description = worksheet.Cells[row, 5].Text;
+                        var Amount = worksheet.Cells[row, 6].Text;
+                        var ImagePath = worksheet.Cells[row, 7].Text;
+
+                        var paths = ImagePath.Split(',');
+
+                        foreach (var path in paths)
+                        {
+                            var fileName = Path.GetFileName(path);
+                            var imageFolderPath = Path.Combine(_imageFolderPath, category, subcategory);
+                            var imageFilePath = Path.Combine(imageFolderPath, fileName);
+                            var baseUrl = $"{Request.Scheme}://{Request.Host}";
+                            Directory.CreateDirectory(imageFolderPath);
+                            System.IO.File.Copy(path, imageFilePath, true);
+                            var model = new Product()
+                            {
+                                SubCategoryName = subcategory,
+                                Category = category,
+                                ImagePath = $"{baseUrl}/resources/SubCategory/{category}/{subcategory}/{fileName}",
+                                Description=Description,
+                                BrandName=BrandName,
+                                Amount=Convert.ToDecimal(Amount)
+                            };
+                            dataModels.Add(model);
+                        }
+                    }
+                }
+            }
+            var result = await services.AddProduct(dataModels);
             if (result != null)
             {
                 Response.Success = true;
