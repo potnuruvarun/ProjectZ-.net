@@ -1,38 +1,51 @@
-name: Build and Analyze
+name: Build
 
 on:
   push:
     branches:
-      - main
+      - master
+
 
 jobs:
-  build-and-analyze:
-    name: Build and analyze with SonarQube
-    runs-on: ubuntu-latest
-
+  build:
+    name: Build and analyze
+    runs-on: windows-latest
+    
     steps:
-      - name: Checkout repository
-        uses: actions/checkout@v2
-
-      - name: Set up JDK 11
-        uses: actions/setup-java@v2
+      - uses: actions/checkout@v4
         with:
-          java-version: 11
-
+          fetch-depth: 0  # Shallow clones should be disabled for a better relevancy of analysis
+      - name: Set up JDK 17
+        uses: actions/setup-java@v1
+        with:
+          java-version: 17
       - name: Cache SonarQube packages
-        uses: actions/cache@v2
+        uses: actions/cache@v1
         with:
-          path: ~/.sonar/cache
+          path: ~\.sonar\cache
           key: ${{ runner.os }}-sonar
-
+          restore-keys: ${{ runner.os }}-sonar
+      - name: Cache SonarQube scanner
+        id: cache-sonar-scanner
+        uses: actions/cache@v1
+        with:
+          path: .\.sonar\scanner
+          key: ${{ runner.os }}-sonar-scanner
+          restore-keys: ${{ runner.os }}-sonar-scanner
+      - name: Install SonarQube scanner
+        if: steps.cache-sonar-scanner.outputs.cache-hit != 'true'
+        shell: powershell
+        run: |
+          New-Item -Path .\.sonar\scanner -ItemType Directory
+          dotnet tool update dotnet-sonarscanner --tool-path .\.sonar\scanner
       - name: Check SonarQube server availability
         run: |
           echo "Checking SonarQube server accessibility..."
           curl -v ${{ secrets.SONAR_HOST_URL }}/api/server/version
 
-      - name: SonarQube Scan
+      - name: Build and analyze
+        shell: powershell
         run: |
-          ./gradlew sonarqube \
-            -Dsonar.projectKey=my_project_key \
-            -Dsonar.host.url=${{ secrets.SONAR_HOST_URL }} \
-            -Dsonar.login=${{ secrets.SONAR_TOKEN }}
+          .\.sonar\scanner\dotnet-sonarscanner begin /k:"potnuruvarun_ProjectZ-.net_0c3aad13-89da-45d5-b651-d9f2d8c93cde" /d:sonar.token="${{ secrets.SONAR_TOKEN }}" /d:sonar.host.url="${{ secrets.SONAR_HOST_URL }}"
+          dotnet build
+          .\.sonar\scanner\dotnet-sonarscanner end /d:sonar.token="${{ secrets.SONAR_TOKEN }}"
