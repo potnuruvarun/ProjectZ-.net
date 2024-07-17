@@ -21,6 +21,11 @@ jobs:
         with:
           java-version: 17
 
+      - name: Set up .NET SDK
+        uses: actions/setup-dotnet@v3
+        with:
+          dotnet-version: '7.x'  # Ensure this matches the .NET version used in your project
+
       - name: Cache SonarQube packages
         uses: actions/cache@v1
         with:
@@ -43,10 +48,16 @@ jobs:
           New-Item -Path .\.sonar\scanner -ItemType Directory
           dotnet tool install dotnet-sonarscanner --tool-path .\.sonar\scanner
 
+      - name: Check SonarQube server availability
+        run: |
+          echo "Checking SonarQube server accessibility..."
+          curl -v ${{ secrets.SONAR_HOST_URL }}/api/server/version
+
       - name: SonarQube Begin Analysis
         shell: powershell
         run: |
-          .\.sonar\scanner\dotnet-sonarscanner begin /k:"potnuruvarun_ProjectZ-.net_0c3aad13-89da-45d5-b651-d9f2d8c93cde" /d:sonar.token="${{ secrets.SONAR_TOKEN }}" /d:sonar.host.url="${{ secrets.SONAR_HOST_URL }}"
+          echo "Starting SonarQube analysis..."
+          .\.sonar\scanner\dotnet-sonarscanner begin /k:"potnuruvarun_ProjectZ-.net_0c3aad13-89da-45d5-b651-d9f2d8c93cde" /d:sonar.token="${{ secrets.SONAR_TOKEN }}" /d:sonar.host.url="${{ secrets.SONAR_HOST_URL }}" || exit 1
 
       - name: Build Solution
         shell: powershell
@@ -56,4 +67,5 @@ jobs:
       - name: SonarQube End Analysis
         shell: powershell
         run: |
-          .\.sonar\scanner\dotnet-sonarscanner end /d:sonar.token="${{ secrets.SONAR_TOKEN }}"
+          echo "Ending SonarQube analysis..."
+          .\.sonar\scanner\dotnet-sonarscanner end /d:sonar.token="${{ secrets.SONAR_TOKEN }}" || exit 1
