@@ -38,11 +38,6 @@ jobs:
         run: |
           New-Item -Path .\.sonar\scanner -ItemType Directory
           dotnet tool update dotnet-sonarscanner --tool-path .\.sonar\scanner
-      - name: Check SonarQube server availability
-        run: |
-          echo "Checking SonarQube server accessibility..."
-          curl -v ${{ secrets.SONAR_HOST_URL }}/api/server/version
-
       - name: Build and analyze
         shell: powershell
         run: |
