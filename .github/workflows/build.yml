@@ -41,6 +41,6 @@ jobs:
       - name: Build and analyze
         shell: powershell
         run: |
-          .\.sonar\scanner\dotnet-sonarscanner begin /k:"potnuruvarun_ProjectZ-.net_0417f66c-e718-4570-9a15-0d03e3a3f71f" /d:sonar.token="${{ secrets.SONAR_TOKEN }}" /d:sonar.host.url="${{ secrets.SONAR_HOST_URL }}"
+          .C:\Users\sit363.SIT\Downloads\SonarServer\sonar-scanner-6.1.0.4477-windows-x64\bin\sonarscanner begin /k:"potnuruvarun_ProjectZ-.net_0417f66c-e718-4570-9a15-0d03e3a3f71f" /d:sonar.token="${{ secrets.SONAR_TOKEN }}" /d:sonar.host.url="${{ secrets.SONAR_HOST_URL }}"
           dotnet build
-          .\.sonar\scanner\dotnet-sonarscanner end /d:sonar.token="${{ secrets.SONAR_TOKEN }}"
+          .C:\Users\sit363.SIT\Downloads\SonarServer\sonar-scanner-6.1.0.4477-windows-x64\bin\sonarscanner end /d:sonar.token="${{ secrets.SONAR_TOKEN }}"
