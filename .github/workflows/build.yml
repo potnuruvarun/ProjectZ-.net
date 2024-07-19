@@ -43,7 +43,7 @@ jobs:
           dotnet tool update dotnet-sonarscanner --tool-path ./.sonar/scanner
       - name: Create SonarQube configuration directory
         run: |
-          mkdir .sonarqube\conf
+          mkdir .sonarqube\conf\SonarQubeAnalysisConfig.xml.
           echo '<?xml version="1.0" encoding="utf-8"?><SonarQubeAnalysisConfig><property name="sonar.host.url">http://localhost:8000</property><property name="sonar.login">your-sonar-token</property><property name="sonar.projectKey">ProjectKey</property><property name="sonar.projectName">ProjectName</property><property name="sonar.projectVersion">1.0</property><property name="sonar.sources">.</property><property name="sonar.language">cs</property></SonarQubeAnalysisConfig>' | Out-File -Encoding utf8 .sonarqube\conf\SonarQubeAnalysisConfig.xml
       - name: Build and analyze
         shell: powershell
