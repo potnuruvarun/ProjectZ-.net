@@ -42,14 +42,6 @@ jobs:
           New-Item -Path ./.sonar/scanner -ItemType Directory
           dotnet tool update dotnet-sonarscanner --tool-path ./.sonar/scanner
 
-      - name: Create SonarQube configuration directory
-        run: |
-          mkdir -p .sonarqube\conf
-          echo '<?xml version="1.0" encoding="utf-8"?><SonarQubeAnalysisConfig><property name="sonar.host.url">${{ secrets.SONAR_HOST_URL }}</property><property name="sonar.login">${{ secrets.SONAR_TOKEN }}</property><property name="sonar.projectKey">potnuruvarun_ProjectZ-.net_a41be169-1179-414e-8522-88a1522e8c7e</property><property name="sonar.projectName">ProjectName</property><property name="sonar.projectVersion">1.0</property><property name="sonar.sources">.</property><property name="sonar.language">cs</property></SonarQubeAnalysisConfig>' > .sonarqube\conf\SonarQubeAnalysisConfig.xml
-
-      - name: List SonarQube config directory
-        run: dir .sonarqube\conf
-
       - name: Build and analyze
         shell: powershell
         run: |
