@@ -35,17 +35,12 @@ jobs:
           key: ${{ runner.os }}-sonar-scanner
           restore-keys: ${{ runner.os }}-sonar-scanner
 
-      - name: Install SonarQube scanner for MSBuild
+      - name: Install SonarScanner for MSBuild
         if: steps.cache-sonar-scanner.outputs.cache-hit != 'true'
         shell: powershell
         run: |
           New-Item -Path ./.sonar/scanner -ItemType Directory
           dotnet tool update dotnet-sonarscanner --tool-path ./.sonar/scanner
-
-      - name: Create SonarQube configuration directory
-        run: |
-          mkdir .sonarqube\conf
-          echo '<?xml version="1.0" encoding="utf-8"?><SonarQubeAnalysisConfig><property name="sonar.host.url">http://192.168.3.63:8000</property><property name="sonar.login">your-sonar-token</property><property name="sonar.projectKey">ProjectKey</property><property name="sonar.projectName">ProjectName</property><property name="sonar.projectVersion">1.0</property><property name="sonar.sources">.</property><property name="sonar.language">cs</property></SonarQubeAnalysisConfig>' | Out-File -Encoding utf8 .sonarqube\conf\SonarQubeAnalysisConfig.xml
 
       - name: Build and analyze
         shell: powershell
