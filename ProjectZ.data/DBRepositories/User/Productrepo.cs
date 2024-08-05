@@ -19,6 +19,12 @@ namespace ProjectZ.data.DBRepositories.User
         {
         }
 
+        public async Task<List<Posters>> GetPostersList()
+        {
+            var data = await QueryAsync<Posters>(StorageProcedure.GetAllposters, commandType: CommandType.StoredProcedure);
+            return data.ToList();
+        }
+
         public async Task<List<Product>> GetProductList(Productinput model)
         {
             var para = new DynamicParameters();

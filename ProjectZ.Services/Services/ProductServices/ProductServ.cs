@@ -20,6 +20,11 @@ namespace ProjectZ.Services.Services.ProductServices
             repo = _repo;
         }
 
+        public async Task<List<Posters>> GetAllPosters()
+        {
+            return await repo.GetPostersList();
+        }
+
         public async Task<List<Product>> GetAllProducts(Productinput model)
         {
             return await repo.GetProductList(model);

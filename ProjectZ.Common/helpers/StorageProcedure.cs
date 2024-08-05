@@ -10,7 +10,7 @@ namespace ProjectZ.Common.helpers
     public class StorageProcedure
     {
 
-        #region Registrtaion
+        #region Login
         public const string registration = "sp_registration";
         public const string Register = "sp_register";
         public const string Login = "sp_login";
@@ -20,25 +20,21 @@ namespace ProjectZ.Common.helpers
         #endregion
 
 
-        #region
+        #region Admin
         public const string posters = "_sp_poster";
-        public const string viewposters = "_spposterview";
-        #endregion
-
-        #region
         public const string AddingSubCategories = "sp_Subcategory";
-        public const string viewsubcategoryposters = "sp_viewsubcategoryposters";
-        #endregion
-
-        #region
         public const string Addproducts = "_spinsertproduct";
-        public const string GetProducts = "sp_products";
-        #endregion
-
-        #region
         public const string GetRoled = "sp_role";
+        public const string DeleteSubCategory = "sp_deletesubcategory";
+        public const string DeletePosters = "sp_deleteposters";
         #endregion
 
+        #region Users
+        public const string viewposters = "_spposterview";
+        public const string viewsubcategoryposters = "sp_viewsubcategoryposters";
+        public const string GetProducts = "sp_products";
+        public const string GetAllposters = "sp_AllPosters";
+        #endregion
 
     }
 }

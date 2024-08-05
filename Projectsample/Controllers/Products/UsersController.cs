@@ -41,10 +41,10 @@ namespace Api.Controllers.Products
         }
 
         [HttpGet("GetSubCAtegoryPosters")]
-        public async Task<ApiPostResponse<List<SubCategory>>> GetSubcategoryposters(string Category)
+        public async Task<ApiPostResponse<List<SubCategory>>> GetSubcategoryposters()
         {
             ApiPostResponse<List<SubCategory>> Response = new();
-            var result = await _repo.GetSubPosters(Category);
+            var result = await _repo.GetSubPosters();
             Response.Data = result;
             if (result != null)
             {
@@ -64,6 +64,24 @@ namespace Api.Controllers.Products
         {
             ApiPostResponse<List<Product>> Response = new();
             var result = await serv.GetAllProducts(model);
+            Response.Data = result;
+            if (result != null)
+            {
+                Response.Success = true;
+                Response.Message = "Success";
+            }
+            else
+            {
+                Response.Success = false;
+                Response.Message = string.Empty;
+            }
+            return Response;
+        }
+        [HttpGet("AllPosters")]
+        public async Task<ApiPostResponse<List<Posters>>> GetAllPosters()
+        {
+            ApiPostResponse<List<Posters>> Response = new();
+            var result = await serv.GetAllPosters();
             Response.Data = result;
             if (result != null)
             {

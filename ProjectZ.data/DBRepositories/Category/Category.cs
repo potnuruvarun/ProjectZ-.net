@@ -18,11 +18,9 @@ namespace ProjectZ.data.DBRepositories.Dmeo
         {
             _inforepo = repo;
         }
-        public async Task<List<SubCategory>> GetSubPosters(string Category)
+        public async Task<List<SubCategory>> GetSubPosters()
         {
-            var para = new DynamicParameters();
-            para.Add("@subcategoryposters", Category);
-            var data = await QueryAsync<SubCategory>(StorageProcedure.viewsubcategoryposters, para, commandType: CommandType.StoredProcedure);
+            var data = await QueryAsync<SubCategory>(StorageProcedure.viewsubcategoryposters,commandType: CommandType.StoredProcedure);
             if (data.Count() >= 1)
             {
                 return data.ToList();
@@ -39,13 +37,11 @@ namespace ProjectZ.data.DBRepositories.Dmeo
 
                 var category = modell.Category;
                 var imagePaths = modell.ImagePath;
-                var serverpath = modell.ServerPath;
 
 
                 var para = new DynamicParameters();
                 para.Add("@CategoryName", category);
                 para.Add("@ImagePaths", imagePaths);
-                para.Add("@Serverpath", serverpath);
 
                 var data = await QueryFirstOrDefaultAsync<Posters>(StorageProcedure.posters, para, commandType: CommandType.StoredProcedure);
 

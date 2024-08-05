@@ -10,5 +10,6 @@ namespace ProjectZ.Services.Services.ProductServices
     public interface IProductSev
     {
         Task<List<Product>> GetAllProducts(Productinput model);
+        Task<List<Posters>> GetAllPosters();
     }
 }

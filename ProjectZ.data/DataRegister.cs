@@ -1,4 +1,5 @@
-﻿using ProjectZ.data.DBRepositories.Dmeo;
+﻿using ProjectZ.data.DBRepositories.Admin;
+using ProjectZ.data.DBRepositories.Dmeo;
 using ProjectZ.data.DBRepositories.GetInfo;
 using ProjectZ.data.DBRepositories.Login;
 using ProjectZ.data.DBRepositories.Registration;
@@ -21,7 +22,8 @@ namespace ProjectZ.data
                 {typeof(ILoginRepo),typeof(LoginRepo)},
                 {typeof(ICategory),typeof(Category)},
                 {typeof(IGetInfoRepo),typeof(GetInfoRepo)},
-                {typeof(IProductrepo),typeof(Productrepo)}
+                {typeof(IProductrepo),typeof(Productrepo)},
+                {typeof(IAdminRepo),typeof(Adminrepo)}
 
             };
             return dictionary;

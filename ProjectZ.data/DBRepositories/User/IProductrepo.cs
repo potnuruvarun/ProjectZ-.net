@@ -10,5 +10,7 @@ namespace ProjectZ.data.DBRepositories.User
     public interface IProductrepo
     {
         Task<List<Product>> GetProductList(Productinput model);
+
+        Task<List<Posters>> GetPostersList();
     }
 }

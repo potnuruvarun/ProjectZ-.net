@@ -11,8 +11,11 @@ namespace ProjectZ.Model.Models.CategoryModels.Category
         public int Id { get; set; }
         public string? Category { get; set; }
         public string? ImagePath { get; set; }
+        public int Deleted { get; set; }
+        public DateTime Createdon { get; set; }
+        public DateTime ModifiedOn { get; set; }
 
-        public string? ServerPath { get; set; }
+
         //public int roleid { get; set; }
     }
 
@@ -21,6 +24,10 @@ namespace ProjectZ.Model.Models.CategoryModels.Category
         public string? SubCategoryName { get; set; }
         public string? Category { get; set; }
         public string? ImagePath { get; set; }
+        public int Active { get; set; }
+        public DateTime Createdon { get; set; }
+        public DateTime ModifiedOn { get; set; }
+        public int SubCategoryId { get; set; }
     }
 
     public class Product

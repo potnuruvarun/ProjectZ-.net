@@ -96,8 +96,7 @@ namespace Api.Controllers.Collection
                             var model = new Posters()
                             {
                                 Category = category,
-                                ImagePath = imageFilePath,
-                                ServerPath= $"{baseUrl}/resources/Posters/{category}Posters/{fileName}"
+                                ImagePath = $"{baseUrl}/resources/Posters/{category}Posters/{fileName}",
                             };
                             dataModels.Add(model);
                         }
